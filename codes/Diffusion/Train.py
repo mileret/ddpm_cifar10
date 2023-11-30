@@ -62,8 +62,9 @@ def train(modelConfig: Dict):
                     "LR": optimizer.state_dict()['param_groups'][0]["lr"]
                 })
         warmUpScheduler.step()
-        torch.save(net_model.state_dict(), os.path.join(
-            modelConfig["save_weight_dir"], 'ckpt_' + str(e) + "_.pt"))
+        if e % 10 == 0:
+            torch.save(net_model.state_dict(), os.path.join(
+                modelConfig["save_weight_dir"], 'ckpt_' + str(e) + "_.pt"))
 
 
 def eval(modelConfig: Dict):
@@ -89,3 +90,4 @@ def eval(modelConfig: Dict):
         sampledImgs = sampledImgs * 0.5 + 0.5  # [0 ~ 1]
         save_image(sampledImgs, os.path.join(
             modelConfig["sampled_dir"],  modelConfig["sampledImgName"]), nrow=modelConfig["nrow"])
+        
